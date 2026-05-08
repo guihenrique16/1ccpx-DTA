@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        let dados = [2, 5, 2, 7, 2, 9];
+        let alvo = 5;
+        let contador = 0;
+
+        for (let i = 0; i < dados.length; i++) {
+            if (dados[i] === alvo) {
+                contador++;
+            }
+
+        };
+        if (contador == 0) {
+            console.log('Elemento ' + alvo + ' nao encontrado');
+
+        } else {
+            if (contador == 1) {
+                console.log('Elemento ' + alvo + ' encontrado 1 vez');
+            } else {
+
+                console.log('Elemento ' + alvo + ' encontrado ' + contador + ' vezes');
+            }
+
+        }
+
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
