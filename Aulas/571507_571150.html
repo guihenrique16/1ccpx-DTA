@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Gerenciador de Fila de Atendimento - DSA</title>
+<style>
+        body {
+            font-family: Arial;
+            margin: 30px;
+        }
+        button {
+            width: 180px;
+        }
+        input {
+            width: 450px;
+        }
+        input, button {
+            margin: 5px;
+            padding: 8px;
+        }
+        #saida {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+        }
+        .atendendo {
+            color: green;
+            font-weight: bold;
+        }
+</style>
+</head>
+<body>
+<h1>Fila de Atendimento</h1>
+<input type="text" id="nome" placeholder="Digite o nome da pessoa">
+<br>
+<button onclick="adicionarInicio()">Adicionar Prioridade</button>
+<button onclick="adicionarFim()">Adicionar ao Fim</button>
+<button onclick="removerPorNome()">Remover por Nome</button>
+<br>
+<button onclick="mostrar()">Mostrar Fila</button>
+<button onclick="contar()">Contar Pessoas</button>
+<button onclick="chamarProxima()">Chamar Próxima Pessoa</button>
+<br>
+<input type="number" id="posOrigem" placeholder="Posição Origem" style="width: 100px;">
+<input type="number" id="posDestino" placeholder="Posição Destino" style="width: 100px;">
+<button onclick="mover()">Mover Posição</button>
+<div id="saida">Fila...</div>
+ 
+<script>
+    let valores = [];
+    let proximo = [];
+    let inicio = -1;
+    let ultimo = -1;
+    function obterNovoIndice() {
+        for (let i = 0; i < valores.length; i++) {
+            if (valores[i] === undefined || valores[i] === null) return i;
+        }
+        return valores.length;
+    }
+    function adicionarFim() {
+        let nome = document.getElementById("nome").value;
+        if (nome === "") return alert("Digite o nome da pessoa");
+        let novoIndice = obterNovoIndice();
+        valores[novoIndice] = nome;
+        proximo[novoIndice] = -1;
+        if (inicio === -1) {
+            inicio = novoIndice;
+            ultimo = novoIndice;
+        } else {
+            proximo[ultimo] = novoIndice;
+            ultimo = novoIndice;
+        }
+        document.getElementById("nome").value = "";
+        mostrar();
+    }
+    function adicionarInicio() {
+        let nome = document.getElementById("nome").value;
+        if (nome === "") return alert("Digite o nome da pessoa");
+        let novoIndice = obterNovoIndice();
+        valores[novoIndice] = nome;
+        proximo[novoIndice] = inicio;
+        inicio = novoIndice;
+        if (ultimo === -1) {
+            ultimo = novoIndice;
+        }
+        document.getElementById("nome").value = "";
+        mostrar();
+    }
+    function removerPorNome() {
+        let nome = document.getElementById("nome").value;
+        let atual = inicio;
+        let anterior = -1;
+        while (atual !== -1) {
+            if (valores[atual] === nome) {
+                if (anterior === -1) {
+                    inicio = proximo[atual];
+                } else {
+                    proximo[anterior] = proximo[atual];
+                }
+                if (atual === ultimo) ultimo = anterior;
+                valores[atual] = null;
+                mostrar();
+                return;
+            }
+            anterior = atual;
+            atual = proximo[atual];
+        }
+        alert("Pessoa não encontrada.");
+    }
+    function mostrar() {
+        let saida = document.getElementById("saida");
+        let resultado = "<strong>Fila de Atendimento:</strong><br>";
+        let atual = inicio;
+        let contador = 1;
+        if (inicio === -1) {
+            resultado = "Fila Vazia";
+        } else {
+            while (atual !== -1) {
+                if (atual === inicio) {
+                    resultado += contador + ". <span class='atendendo'>[ATENDENDO: " + valores[atual] + "]</span><br>";
+                } else {
+                    resultado += contador + ". " + valores[atual] + "<br>";
+                }
+                atual = proximo[atual];
+                contador++;
+            }
+        }
+        saida.innerHTML = resultado;
+    }
+    function contar() {
+        let quantidade = 0;
+        let atual = inicio;
+        while (atual !== -1) {
+            quantidade++;
+            atual = proximo[atual];
+        }
+        alert("Quantidade de pessoas na fila: " + quantidade);
+    }
+    function chamarProxima() {
+        if (inicio === -1) return alert("Fila vazia");
+        let atendido = valores[inicio];
+        let removido = inicio;
+        inicio = proximo[inicio];
+        if (inicio === -1) ultimo = -1;
+        valores[removido] = null;
+        alert("Chamando: " + atendido);
+        mostrar();
+    }
+    function mover() {
+        let posOrigem = parseInt(document.getElementById("posOrigem").value);
+        let posDestino = parseInt(document.getElementById("posDestino").value);
+        if (isNaN(posOrigem) || isNaN(posDestino) || posOrigem === posDestino) return;
+        let anteriorOrigem = -1;
+        let atualOrigem = inicio;
+        let contador = 1;
+        while (atualOrigem !== -1 && contador < posOrigem) {
+            anteriorOrigem = atualOrigem;
+            atualOrigem = proximo[atualOrigem];
+            contador++;
+        }
+        if (atualOrigem === -1) return alert("Posição de origem inválida");
+        if (anteriorOrigem === -1) {
+            inicio = proximo[atualOrigem];
+        } else {
+            proximo[anteriorOrigem] = proximo[atualOrigem];
+        }
+        if (atualOrigem === ultimo) ultimo = anteriorOrigem;
+        if (posDestino <= 1) {
+            proximo[atualOrigem] = inicio;
+            inicio = atualOrigem;
+        } else {
+            let anteriorDest = -1;
+            let atualDest = inicio;
+            contador = 1;
+            while (atualDest !== -1 && contador < posDestino) {
+                anteriorDest = atualDest;
+                atualDest = proximo[atualDest];
+                contador++;
+            }
+            proximo[atualOrigem] = atualDest;
+            proximo[anteriorDest] = atualOrigem;
+            if (atualDest === -1) ultimo = atualOrigem;
+        }
+        mostrar();
+    }
+</script>
+</body>
+</html>
+ 
+ 
+ 
+ 
+ 
