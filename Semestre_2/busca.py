@@ -28,3 +28,5 @@ numeros = [3, 7, 10, 15, 21, 28, 32, 40, 47, 51, 63]
 posicao = busca_binaria(numeros, 51)
 
 print(posicao + 1)
+
+
