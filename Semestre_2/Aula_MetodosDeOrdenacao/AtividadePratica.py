@@ -39,7 +39,7 @@ def bubble_otimizado(lista):
         if not trocou:
             break
 
-    print(f"Bubble Sort    -> Comparações: {comparacoes} | Trocas: {trocas}")
+    print(f"Bubble Sort    -> Comparacoes: {comparacoes} | Trocas: {trocas}")
     return(lista)
 
 # 2. Selection Sort
@@ -60,7 +60,7 @@ def selection(lista):
             lista[i], lista[menor] = lista[menor], lista[i]
             trocas += 1
 
-    print(f"Selection Sort -> Comparações: {comparacoes} | Trocas: {trocas}")
+    print(f"Selection Sort -> Comparacoes: {comparacoes} | Trocas: {trocas}")
     return(lista)
 
 # 3. Insertion Sort
@@ -86,10 +86,10 @@ def insertion(lista):
         movimentacoes += 1  # Reatribuição do elemento
 
     print(
-        f"Insertion Sort -> Comparações: {comparacoes} | Movimentações: {movimentacoes}"
+        f"Insertion Sort -> Comparacoes: {comparacoes} | Movimentacoes: {movimentacoes}"
     )
     return[lista]
 
 print(bubble_otimizado(numeros.copy()))
 print(selection(numeros.copy()))
-print(insertion(numeros))
+print(insertion(numeros.copy()))
