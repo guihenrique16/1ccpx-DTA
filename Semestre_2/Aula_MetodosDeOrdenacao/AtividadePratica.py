@@ -80,6 +80,7 @@ def insertion(lista):
         while j >= 0 and lista[j] > atual:
             lista[j + 1] = lista[j]
             movimentacoes += 1
+            comparacoes +=1
             j -= 1
 
         lista[j + 1] = atual
@@ -88,7 +89,7 @@ def insertion(lista):
     print(
         f"Insertion Sort -> Comparacoes: {comparacoes} | Movimentacoes: {movimentacoes}"
     )
-    return[lista]
+    return(lista)
 
 print(bubble_otimizado(numeros.copy()))
 print(selection(numeros.copy()))
